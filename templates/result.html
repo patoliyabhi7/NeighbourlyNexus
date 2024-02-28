@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Python Guides</title>
+    <style>
+        h1 {
+          text-align: center;
+          font-size: 24px;
+        }
+        td, th {
+          text-align: center;
+        }
+      </style>
+</head>
+<body>
+  <img src="https://shivamcasa.000webhostapp.com/logo3.png" alt="" style="height: 150px; width: 200px">
+     <hr/>
+      <h1 style="text-decoration: underline;">List of Customers</h1>
+      <h3>Report Created On : {{current_date}}</h3>
+      <table border="1" align="center" cellpadding="5" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>House No</th>
+            <th>Contact</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for person in data %}
+            <tr>
+              <td>{{ person.id }} </td>
+              <td>{{ person.user.username }} </td>
+              <td>{{ person.user.email }} </td>
+             
+              <td>{{ person.house_no }}</td>
+              <td>{{ person.phone }}</td>
+              <td>{{ person.reg_date }}</td>
+            </tr>
+          {% endfor %}    
+        </tbody>
+      </table>
+</body>
+</html>

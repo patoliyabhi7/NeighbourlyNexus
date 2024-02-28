@@ -1,0 +1,89 @@
+{% extends 'chairman/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Basic Bootstrap Table -->
+              <div class="card  col-8">
+                <h5 class="card-header text-center">Paid Maintenance Details</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead>
+                      
+
+                    </thead>
+                    <tbody class="table-border-bottom-0 text-center">
+                      
+                      <tr>
+                        <th class="border-right">ID</th>
+                        <td> {{result.id}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">House Number</th>
+                        <td>{{result.member.house_no}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Name</th>
+                        <td>{{result.member.user.first_name}} {{result.member.user.last_name}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Contact</th>
+                        <td>{{result.member.phone}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Maintenance Paid On</th>
+                        <td>{{result.date_time}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Year</th>
+                        <td>{{result.maintenance.year}}</td>
+                      </tr>
+                      
+                      <tr>
+                        <th class="border-right">Amount</th>
+                        <td>{{result.maintenance.amount}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Description</th>
+                        <td>{{result.maintenance.description}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">From Date</th>
+                        <td>{{result.maintenance.from_date}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">To Date</th>
+                        <td>{{result.maintenance.to_date}}</td>
+                      </tr>
+
+
+                      <tr>
+                        <th class="border-right">Total Members</th>
+                        <td>{{result.member.total_members}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Email</th>
+                        <td>{{result.member.user.email}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Username</th>
+                        <td>{{result.member.user.username}}</td>
+                      </tr>
+                      
+                      <tr>
+                        <th class="border-right">Gender</th>
+                        <td>{{result.member.gender}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Registration Date</th>
+                        <td>{{result.member.reg_date}}</td>
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'chairman/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Basic Bootstrap Table -->
+              <div class="card">
+                <h5 class="card-header">Members</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead>
+
+                      <!-- id,username,fname,lname,email,action -->
+                      <!-- gender,phone,city -->
+                      <tr>
+                        <!-- <th>Id</th> -->
+                        <th><i class="me-1"></i>Sr No.</th>
+                        <th>House No.</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for row in result %}
+                        {% if row.username != 'admin' %}
+                      <tr>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{forloop.counter}}</strong></td>
+                        <td>{{row.house_no}}</td>
+                        <td>{{row.user.first_name}}</td>
+                        <td>{{row.user.last_name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="/chairman/edit_member/{{row.id}}"
+                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                              >
+                              <a class="dropdown-item" href="/chairman/remove_member/{{row.id}}"
+                                ><i class="bx bx-trash me-1"></i> Remove</a
+                              >
+                              <a class="dropdown-item" href="/chairman/member_details/{{row.id}}"
+                                ><i class="bx bx-caret-right me-1"></i> View More Details</a>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endif %}
+                     {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+{% endblock %}

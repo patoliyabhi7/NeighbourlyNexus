@@ -1,0 +1,70 @@
+{% extends 'myadmin/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Basic Bootstrap Table -->
+              <div class="card  col-8">
+                <h5 class="card-header text-center">User Details</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table">
+                    <thead>
+
+                      <!-- id,username,fname,lname,email,action -->
+                      <!-- gender,phone,city -->
+                      
+
+                    </thead>
+                    <tbody class="table-border-bottom-0 text-center">
+                      {% for row in result2 %}
+                        {% if row.user_id == id1 %}
+                      <tr>
+                        <th class="border-right">ID</th>
+                        <td> {{row.id}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Username</th>
+                        <td>{{row.user.username}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">First Name</th>
+                        <td>{{row.user.first_name}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Last Name</th>
+                        <td>{{row.user.last_name}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Email</th>
+                        <td>{{row.user.email}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Contact</th>
+                        <td>{{row.phone}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Gender</th>
+                        <td>{{row.gender}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">City</th>
+                        <td>{{row.city}}</td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Delete User</th>
+                        <td><a href="/myadmin/remove_user/{{row.user.id}}">Delete</a></td>
+                      </tr>
+                      <tr>
+                        <th class="border-right">Edit User Details</th>
+                        <td><a href="/myadmin/edit_user/{{row.user_id}}">Edit</a></td>
+                      </tr>
+                      {% endif %}
+                     {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+{% endblock %}

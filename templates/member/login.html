@@ -1,0 +1,67 @@
+{% extends 'member/common/login.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+          <!-- Register -->
+          <div class="card">
+            <div class="card-body">
+              <!-- Logo -->
+              <div class="app-brand justify-content-center">
+                <a href="index.html" class="app-brand-link gap-2">
+                   <img src="{% static 'member//assets/img/favicon/logo3.png' %}" width="300px">
+                </a>
+              </div>
+              <!-- /Logo -->
+              <h4 class="mb-2">Welcome member!</h4>
+
+              {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+              {% endif %}
+
+              <form id="formAuthentication" class="mb-3" action="/member/login_check/" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email or Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your email or username"
+                    autofocus
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+
+                    autofocus
+                  />
+                </div>
+                <div class="mb-3 form-password-toggle">
+                </div>
+                <div class="mb-3">
+                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- /Register -->
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}

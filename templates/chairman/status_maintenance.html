@@ -1,0 +1,112 @@
+{% extends 'chairman/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <form action="/chairman/status_maintenance/" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="mb-3 row">
+        <div class="col-4">
+          <select id="event-category-select" name="status" class="form-select">
+            <option value="0">Status</option>
+            <option value="paid" {% if status == 'paid' %} selected {% endif %}>
+              Paid</option>
+            <option value="due" {% if status == 'due' %} selected {% endif %}>
+              Due</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <select id="event-category-select" name="year" class="form-select">
+            <option value="0">Select Year</option>
+
+            <option value="2019" {% if year == '2019' %} selected {% endif %}>
+              2019</option>
+            <option value="2020" {% if year == '2020' %} selected {% endif %}>
+              2020</option>
+            <option value="2021" {% if year == '2021' %} selected {% endif %}>
+              2021</option>
+            <option value="2022" {% if year == '2022' %} selected {% endif %}>
+              2022</option>
+            <option value="2023" {% if year == '2023' %} selected {% endif %}>
+              2023</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <input type="submit" class="btn btn-primary" value="Search" />
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- Basic Bootstrap Table -->
+  <div class="card">
+    <h5 class="card-header">All Paid Maintenance</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
+
+          <tr>
+            <!-- <th>Id</th> -->
+            <th><i class="me-1"></i>Sr No.</th>
+            <th>House No.</th>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Paid On</th>
+            <th>View More Details</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+
+          <!-- if maintenance is paid -->
+          {% if status == 'paid' %}
+            {% for row in result %}
+                  <tr>
+                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{forloop.counter}}</strong></td>
+                    <td>{{row.member.house_no}}</td>
+                    <td>{{row.member.user.first_name}} {{row.member.user.last_name}}</td>
+                    <td>{{row.maintenance.year}}</td>
+                    <td>{{row.maintenance.amount}}</td>
+                    <td style="white-space:pre-wrap">{{row.maintenance.description}}</td>
+                    <td style="white-space:pre-wrap">{{row.date_time}}</td>
+                    <td>
+                      <a class="dropdown-item text-primary" href="/chairman/paid_maintenance_details/{{row.id}}">
+                        <i class="bx bx-caret-right me-1"></i> Details
+                      </a>
+                    </td>
+                  </tr>
+              
+            {% endfor %}
+          {% endif %}
+          
+
+          <!-- if maintenance is unpaid/due -->
+          
+          {% if status == 'due' %}
+            {% for row in result %}
+                  <tr>
+                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{forloop.counter}}</strong></td>
+                    <td>{{row.house_no}}</td>
+                    <td>{{row.user.first_name}} {{row.user.last_name}}</td>
+                    <td>{{m.year}}</td>
+                    <td>{{m.amount}}</td>
+                    <td style="white-space:pre-wrap">{{m.description}}</td>
+                    <td style="white-space:pre-wrap" class="text-danger">Pending</td>
+                    <td>
+                      <a class="dropdown-item text-primary" href="/chairman/paid_maintenance_details/{{row.id}}">
+                        <i class="bx bx-caret-right me-1"></i> Details
+                      </a>
+                    </td>
+                  </tr>
+              
+            {% endfor %}
+          {% endif %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endblock %}

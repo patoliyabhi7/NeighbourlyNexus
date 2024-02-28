@@ -1,0 +1,111 @@
+{% load static %}
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="/member/dashboard/" class="">
+                <img src="{% static 'member/assets/img/favicon/logo3.png' %}" width="210px" height="60px">
+
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1 mt-3">
+          <!-- Dashboard -->
+          <li class="menu-item {% if request.path == '/member/dashboard/' %}active{% endif %}">
+            <a href="/member/dashboard/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+
+
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Event</span>
+          </li>
+
+           <li class="menu-item {% if request.path == '/member/add_maintenance/' %}active{% endif %}">
+            <a href="/member/paid_event/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-money"></i>
+              <div data-i18n="Analytics">Paid for Event</div>
+            </a>
+          </li>
+          
+           <li class="menu-item {% if request.path == '/member/all_events/' %}active{% endif %}  {% if request.resolver_match.url_name == 'edit_event' %}active{% endif %}">
+            <a href="/member/all_events/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-event"></i>
+              <div data-i18n="Analytics">All Events</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Meeting</span>
+          </li>
+
+           <li class="menu-item {% if request.path == '/member/all_meeting/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_meeting' %}active{% endif %}">
+            <a href="/member/all_meeting/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar"></i>
+              <div data-i18n="Analytics">All Meetings</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Maintenance</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/paid_maintenance/' %}active{% endif %}">
+            <a href="/member/paid_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-money"></i>
+              <div data-i18n="Analytics">Paid Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/all_maintenance/' %}active{% endif %} {% if request.path == '/member/make_payment/' %}active{% endif %}">
+            <a href="/member/all_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-wallet"></i>
+              <div data-i18n="Analytics">All Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Complaint</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/complaint/' %}active{% endif %}">
+            <a href="/member/complaint/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-envelope"></i>
+              <div data-i18n="Analytics">Post Complaint</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/all_complaints/' %}active{% endif %}">
+            <a href="/member/all_complaints/" class="menu-link">
+              <i class="menu-icon tf-icons bx bxs-envelope"></i>
+              <div data-i18n="Analytics">All Complaints</div>
+            </a>
+          </li>
+
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Profile</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/member_details/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
+            <a href="/member/member_details/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="Analytics">My Profile</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/member/users/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
+            <a href="/member/logout/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-power-off"></i>
+              <div data-i18n="Analytics">Logout</div>
+            </a>
+          </li>
+        </ul>
+      </aside>

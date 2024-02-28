@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Python Guides</title>
+    <style>
+        h1 {
+          text-align: center;
+          font-size: 24px;
+        }
+        td, th {
+          text-align: center;
+        }
+      </style>
+</head>
+<body>
+  <img src="https://shivamcasa.000webhostapp.com/logo3.png" alt="" style="height: 150px; width: 200px">
+     <hr/>
+      <h1 style="text-decoration: underline;">List of Orders</h1>
+      <h3>Report Created On : {{current_date}}</h3>
+      <table border="1" align="center" cellpadding="5" cellspacing="0">
+        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer Name</th>
+                                <th>Seller Name</th>
+                                <th>Total Price</th>
+                                <th>Date</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if data %}
+                                {% for ord in data %}
+                                <tr>
+                                    <td>{{ord.id}}</td>
+                                    <td>{{ord.customer.user.username}}</td>
+                                    <td>{{ord.seller.user.username}}</td>
+                                    <td>{{ord.amount}}</td>
+                                    <td>{{ord.date}}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <h5 class="text-center">No Orders Available</h5>
+                            {% endif %}
+                            
+                        </tbody>
+      </table>
+</body>
+</html>

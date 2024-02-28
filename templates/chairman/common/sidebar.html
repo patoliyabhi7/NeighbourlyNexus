@@ -1,0 +1,160 @@
+{% load static %}
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="/chairman/dashboard/" class="">
+                <img src="{% static 'chairman/assets/img/favicon/logo3.png' %}" width="210px" height="60px">
+
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1 mt-3">
+          <!-- Dashboard -->
+          <li class="menu-item {% if request.path == '/chairman/dashboard/' %}active{% endif %}">
+            <a href="/chairman/dashboard/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Member</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/add_member/' %}active{% endif %}">
+            <a href="/chairman/add_member/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user-plus"></i>
+              <div data-i18n="Analytics">Add Member</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/view_member/' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %}">
+            <a href="/chairman/view_member/" class="menu-link">
+             <i class="menu-icon tf-icons bx bx-user"></i>
+
+
+              <div data-i18n="Analytics">All Members</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Event</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/add_event/' %}active{% endif %} ">
+            <a href="/chairman/add_event/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-star"></i>
+              <div data-i18n="Analytics">Add Event</div>
+            </a>
+          </li>
+
+           <li class="menu-item {% if request.path == '/chairman/all_events/' %}active{% endif %}  {% if request.resolver_match.url_name == 'edit_event' %}active{% endif %}">
+            <a href="/chairman/all_events/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-event"></i>
+              <div data-i18n="Analytics">All Events</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Meeting</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/schedule_meeting/' %}active{% endif %}">
+            <a href="/chairman/schedule_meeting/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-plus"></i>
+              <div data-i18n="Analytics">Schedule Meeting</div>
+            </a>
+          </li>
+
+           <li class="menu-item {% if request.path == '/chairman/all_meeting/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_meeting' %}active{% endif %}">
+            <a href="/chairman/all_meeting/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar"></i>
+              <div data-i18n="Analytics">All Meetings</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Maintenance</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/add_maintenance/' %}active{% endif %}">
+            <a href="/chairman/add_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-money"></i>
+              <div data-i18n="Analytics">Add Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/paid_maintenance/' %}active{% endif %}">
+            <a href="/chairman/paid_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
+              <div data-i18n="Analytics">Search Paid Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/status_maintenance/' %}active{% endif %} {% if request.path == '/chairman/paid_due_maintenance/' %}active{% endif %}">
+            <a href="/chairman/status_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-credit-card"></i>
+              <div data-i18n="Analytics">Paid & Due Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/all_maintenance/' %}active{% endif %}">
+            <a href="/chairman/all_maintenance/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-wallet"></i>
+              <div data-i18n="Analytics">All Maintenance</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Complaints</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/all_complaints/' %}active{% endif %} {% if request.resolver_match.url_name == 'complaint_details' %}active{% endif %} ">
+            <a href="/chairman/all_complaints/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-envelope"></i>
+              <div data-i18n="Analytics">All Complaints</div>
+            </a>
+          </li>
+
+
+          <li class="menu-header small text-uppercase">
+             <span class="menu-header-text">Report</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/customer_report/' %}active{% endif %}">
+            <a href="/chairman/customer_report/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-envelope"></i>
+              <div data-i18n="Analytics">Member Report</div>
+            </a>
+          </li>
+          <li class="menu-item {% if request.path == '/chairman/maintenance_report/' %}active{% endif %}">
+            <a href="/chairman/maintenance_report/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-envelope"></i>
+              <div data-i18n="Analytics">Maintenance Payment Report</div>
+            </a>
+          </li>
+        <li class="menu-item {% if request.path == '/chairman/event_report/' %}active{% endif %}">
+            <a href="/chairman/event_report/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-envelope"></i>
+              <div data-i18n="Analytics">Event Payment Report</div>
+            </a>
+
+
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text"></span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/users/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
+            <a href="/chairman/logout/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-power-off"></i>
+              <div data-i18n="Analytics">Logout</div>
+            </a>
+          </li>
+        </ul>
+      </aside>

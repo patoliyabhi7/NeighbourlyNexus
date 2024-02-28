@@ -1,0 +1,104 @@
+{% extends 'chairman/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+      <div class="row mb-5">
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Members</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/view_member/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Events</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/all_events/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Meetings</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/all_meeting/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Add Members</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/add_member/" class="btn btn-primary">Add</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Add Events</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/add_event/" class="btn btn-primary">Add</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Schedule Meetings</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/schedule_meeting/" class="btn btn-primary">Schedule</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Add Maintenance</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/add_maintenance/" class="btn btn-primary">Add</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Paid & Due Maintenance</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/status_maintenance/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Maintenance</h5>
+              <p class="card-text"></p>
+              <a href="/chairman/all_maintenance/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+          {% endblock %}

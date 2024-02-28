@@ -1,0 +1,85 @@
+{% extends 'myadmin/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+      <div class="row mb-5">
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Members</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/view_member/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Events</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/all_events/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Meetings</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/all_meeting/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Add Chairman</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/add_chairman/" class="btn btn-primary">Add</a>
+            </div>
+          </div>
+        </div>
+        
+        
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">View Chairman</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/view_chairman/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Maintenance</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/all_maintenance/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+         <div class="col-md-6 col-lg-4">
+          <div class="card text-center mb-3">
+            <div class="card-body">
+              <h5 class="card-title">All Complaint</h5>
+              <p class="card-text"></p>
+              <a href="/myadmin/all_complaints/" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+          {% endblock %}

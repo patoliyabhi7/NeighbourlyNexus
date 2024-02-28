@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from myadmin.models import *
 from chairman.models import *
@@ -12,6 +12,9 @@ from django.conf import settings
 from datetime import datetime, date
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
+import random
+import json
+
 # from razorpay.utils import verify_payment_signature
 
 
@@ -324,3 +327,22 @@ def paid_event(request):
 
     context = {'result2':result2,'result':result}
     return render(request, 'member/paid_event.html', context)
+
+def get_random_quote(request):
+    with open('quotes.json', 'r') as f:
+        quotes_data = json.load(f)
+    
+    random_quote = random.choice(quotes_data)
+    # print(random_quote)
+    return JsonResponse(random_quote)
+
+def random_thought(request):
+    with open('quotes.json') as f:
+        thoughts = json.load(f)
+    random_thought = random.choice(thoughts)
+    return render(request, 'your_template.html', {'thought': random_thought})
+
+def my_view(request):
+    random_thought = get_random_thought()  # Function to get a random thought
+    print(random_thought)
+    return render(request, 'my_template.html', {'thought': random_thought})

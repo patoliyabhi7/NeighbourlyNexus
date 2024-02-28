@@ -47,7 +47,7 @@ urlpatterns = [
     path('r_details_event/<int:id>', views.r_details_event, name='r_details_event'),
     path('paid_maintenance/', views.paid_maintenance, name='paid_maintenance'),
     path('paid_event/', views.paid_event, name='paid_event'),
-
-
+    path('random-quote/', views.get_random_quote, name='random-quote'),
+    path('random-thought/', views.random_thought, name='random_thought'),
 
 ]

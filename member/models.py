@@ -49,3 +49,9 @@ class Event_Payment(models.Model):
 
 	class Meta:
 		db_table = 'event_payment'
+
+class Thought(models.Model):
+	text = models.TextField()
+	
+	class Meta:
+		db_table = 'thoughts'

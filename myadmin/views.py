@@ -13,8 +13,7 @@ from datetime import datetime, date
 from django.views.generic import View
 from django.template.loader import render_to_string
 from .process import html_to_pdf 
-
-
+from django.contrib.auth.decorators import login_required
 
 def login(request):
     context={}
@@ -42,11 +41,13 @@ def logout(request):
     print(request.user.id)
     return redirect('/myadmin/login/')
 
+@login_required(login_url='/myadmin/login/')
 def dashboard(request):
     print(request.user.id)
     context={}
     return render(request, 'myadmin/dashboard.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def add_chairman(request):
     context={}
     return render(request, 'myadmin/add_chairman.html', context)
@@ -70,7 +71,9 @@ def store_chairman(request):
 
     else:
         print('Password and confirm password mismatched')
+        return redirect('/myadmin/add_chairman/')
 
+@login_required(login_url='/myadmin/login/')
 def view_chairman(request):
     result = User.objects.all()
     result2 = Chairman.objects.all()
@@ -78,24 +81,66 @@ def view_chairman(request):
 
     return render(request, 'myadmin/view_chairman.html', context)
 
+@login_required(login_url='/myadmin/login/')
+def edit_chairman(request,id):
+    result = Chairman.objects.get(pk=id)
+
+    context = {'result':result}
+    return render(request, 'myadmin/edit_chairman.html', context)
+
+def update_chairman(request,id):
+    first_name = request.POST['first_name']
+    last_name = request.POST['last_name']
+    username = request.POST['username']
+    email = request.POST['email']
+
+    gender = request.POST['gender']
+    phone = request.POST['phone']
+
+    result_2 = Chairman.objects.get(pk=id)
+    table_id = result_2.user_id
+
+    print(table_id)
+    
+    data = {
+            'first_name' : first_name,
+            'last_name' : last_name,
+            'username' : username,
+            'email' : email
+        }
+    user = User.objects.update_or_create(pk=table_id,defaults=data)
+
+    data2 = {
+            'gender' : gender,
+            'phone' : phone,
+        }
+    Chairman.objects.update_or_create(pk=id,defaults=data2)
+
+    return redirect('/myadmin/view_chairman/')
+
+
+@login_required(login_url='/myadmin/login/')
 def remove_chairman(request, id):
     result = Chairman.objects.get(pk=id)
     result.delete()
 
     return redirect('/myadmin/add_chairman/')
 
+@login_required(login_url='/myadmin/login/')
 def view_member(request):
     result = Member.objects.all()
     context = {'result':result}
 
     return render(request, 'myadmin/view_member.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def member_details(request, id):
     result = Member.objects.get(pk=id)
 
     context = {'result':result, 'id':id}
     return render(request, 'myadmin/member_details.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def remove_member(request, id):
     result = Member.objects.get(pk=id)
     result2 = User.objects.get(pk=result.user_id)
@@ -106,49 +151,67 @@ def remove_member(request, id):
 
     return redirect('/myadmin/view_member/')
 
-    
-
+@login_required(login_url='/myadmin/login/')
 def all_complaints(request):
     result = Complain.objects.all()
 
     context = {'result':result}
     return render(request, 'myadmin/all_complaints.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def all_events(request):
     result = Event.objects.all()
 
     context = {'result':result}
     return render(request, 'myadmin/all_events.html', context)
 
+def remove_event(request, id):
+    result = Event.objects.get(pk=id)
+    print(result.title)
+    result.delete()
+    return redirect('/myadmin/all_events/')
+
+@login_required(login_url='/myadmin/login/')
 def all_maintenance(request):
     result = Maintenance.objects.all()
 
     context = {'result':result}
     return render(request, 'myadmin/all_maintenance.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def all_meeting(request):
     result = Meeting.objects.all()
     context = {'result':result}
     return render(request, 'myadmin/all_meeting.html', context)
 
+def remove_meeting(request, id):
+    result = Meeting.objects.get(pk=id)
+    print(result.subject)
+    result.delete()
+    return redirect('/myadmin/all_meeting/')
+
+@login_required(login_url='/myadmin/login/')
 def complaint_details(request, id):
     result = Complain.objects.get(pk=id)
 
     context = {'result':result}
     return render(request, 'myadmin/complaint_details.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def paid_maintenance(request):
     result = Maintenance_Payment.objects.all()
 
     context = {'result':result}
     return render(request, 'myadmin/paid_maintenance.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def paid_maintenance_details(request,id):
     result = Maintenance_Payment.objects.get(pk=id)
 
     context = {'result':result}
     return render(request, 'myadmin/paid_maintenance_details.html', context)
 
+@login_required(login_url='/myadmin/login/')
 def customer_report(request):
     if request.method =='POST':
         from_date = request.POST['from_date']
@@ -180,6 +243,7 @@ class GeneratePdf(View):
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
 
+@login_required(login_url='/myadmin/login/')
 def maintenance_report(request):
     if request.method =='POST':
         from_date = request.POST['from_date']

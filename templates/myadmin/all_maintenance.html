@@ -21,7 +21,6 @@
                         <th>End Date</th>
                         <th>Price</th>
                         <th>Description</th>
-                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -33,22 +32,7 @@
                         <td>{{row.to_date}}</td>
                         <td>{{row.amount}}</td>
                         <td style="white-space:pre-wrap">{{row.description}}</td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="/chairman/edit_maintenance/{{row.id}}"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                              >
-                              <a class="dropdown-item" href="/chairman/remove_maintenance/{{row.id}}"
-                                ><i class="bx bx-trash me-1"></i> Remove</a
-                              >
-                              
-                            </div>
-                          </div>
-                        </td>
+                        
                       </tr>
                      {% endfor %}
                     </tbody>

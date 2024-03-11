@@ -22,7 +22,7 @@
                         <th>Amount</th>
                         <th>Description</th>
                         <th>Paid On</th>
-                        <th>View More Details</th>
+                        <th>Date</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -35,11 +35,8 @@
                         <td>{{row.maintenance.amount}}</td>
                         <td style="white-space:pre-wrap">{{row.maintenance.description}}</td>
                         <td style="white-space:pre-wrap">{{row.date_time}}</td>
-                        <td>
-                          <a class="dropdown-item text-primary" href="/chairman/paid_maintenance_details/{{row.id}}">
-                            <i class="bx bx-caret-right me-1"></i> Details
-                          </a>
-                        </td>
+                        <td style="white-space:pre-wrap">{{row.maintenance.from_date}} to {{row.maintenance.to_date}}</td>
+                        
                         
                       </tr>
                      {% endfor %}

@@ -1,0 +1,93 @@
+{% extends 'myadmin/common/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<form method="post" action="/myadmin/update_chairman/{{result.id}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+            <div class="row">
+                <div class="col-12">
+                    <!-- HTML5 Inputs -->
+                    <div class="card mb-4">
+                        <h5 class="card-header">Edit Chairman</h5>
+                        <div class="card-body">
+
+                            <div class="mb-3 row">
+                                <label for="" class="col-md-2 col-form-label form-inline">First Name</label>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" id="first_name" name="first_name"
+                                        value="{{result.user.first_name}}" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="" class="col-md-2 col-form-label form-inline">Last Name</label>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" id="last_name" name="last_name"
+                                        value="{{result.user.last_name}}" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="" class="col-md-2 col-form-label form-inline">Username</label>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" id="username" name="username"
+                                        value="{{result.user.username}}" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="" class="col-md-2 col-form-label form-inline">Email</label>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" id="email" name="email"
+                                        value="{{result.user.email}}" />
+                                </div>
+                            </div>
+
+                            <div class=" mb-3 row">
+                                <div class="col-2">
+                                    <label for="" class="form-label">Gender</label>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-check ">
+                                        <input class="form-check-input" value="male" type="radio" id="male"
+                                            name="gender" {% if result.gender == 'male' %} checked {% endif %} />
+                                        <label class="form-check-label" for="male"> Male </label>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-check ">
+                                        <input class="form-check-input" value="female" type="radio" id="female"
+                                            name="gender" {% if result.gender == 'female' %} checked {% endif %} />
+
+                                        <label class="form-check-label" for="female"> Female </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="" class="col-md-2 col-form-label form-inline">Phone</label>
+                                <div class="col-5">
+                                    <input class="form-control" type="text" id="phone" name="phone"
+                                        value="{{result.phone}}" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-10">
+                                <input type="submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

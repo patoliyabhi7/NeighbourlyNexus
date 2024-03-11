@@ -1,146 +1,153 @@
 {% load static %}
+{% if user.is_authenticated %}
+
+{% endif %}
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          <a href="/myadmin/dashboard/" class="">
-                <img src="{% static 'myadmin/assets/img/favicon/logo3.png' %}" width="210px" height="60px">
+  <div class="app-brand demo">
+    <a href="/myadmin/dashboard/" class="">
+      <img src="{% static 'myadmin/assets/img/favicon/logo3.png' %}" width="210px" height="60px">
+    </a>
 
-          </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
 
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
+  <div class="menu-inner-shadow mt-3"></div>
 
-        <div class="menu-inner-shadow"></div>
+  <ul class="menu-inner py-1 mt-3">
+    <!-- Dashboard -->
+    <li class="menu-item {% if request.path == '/myadmin/dashboard/' %}active{% endif %}">
+      <a href="/myadmin/dashboard/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div data-i18n="Analytics">Dashboard</div>
+      </a>
 
-        <ul class="menu-inner py-1 mt-3">
-          <!-- Dashboard -->
-          <li class="menu-item {% if request.path == '/myadmin/dashboard/' %}active{% endif %}">
-            <a href="/myadmin/dashboard/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-home-circle"></i>
-              <div data-i18n="Analytics">Dashboard</div>
-            </a>
+    </li>
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Chairman</span>
+    </li>
 
-          </li>
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Chairman</span>
-          </li>
+    <li class="menu-item {% if request.path == '/myadmin/add_chairman/' %}active{% endif %}">
+      <a href="/myadmin/add_chairman/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user-plus"></i>
+        <div data-i18n="Analytics">Add Chairman</div>
+      </a>
+    </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/add_chairman/' %}active{% endif %}">
-            <a href="/myadmin/add_chairman/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-user-plus"></i>
-              <div data-i18n="Analytics">Add Chairman</div>
-            </a>
-          </li>
-
-          <li class="menu-item {% if request.path == '/myadmin/view_chairman/' %}active{% endif %}">
-            <a href="/myadmin/view_chairman/" class="menu-link">
-             <i class="menu-icon tf-icons bx bx-user"></i>
-
-
-              <div data-i18n="Analytics">View Chairman</div>
-            </a>
-          </li>
-
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Member</span>
-          </li>
-
-          <li class="menu-item {% if request.path == '/myadmin/view_member/' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %}">
-            <a href="/myadmin/view_member/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-user-circle"></i>
-              <div data-i18n="Analytics">All Members</div>
-            </a>
-          </li>
-
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Event</span>
-          </li>
-
-          
-
-           <li class="menu-item {% if request.path == '/myadmin/all_events/' %}active{% endif %}  {% if request.resolver_match.url_name == 'edit_event' %}active{% endif %}">
-            <a href="/myadmin/all_events/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-calendar-event"></i>
-              <div data-i18n="Analytics">All Events</div>
-            </a>
-          </li>
-
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Meeting</span>
-          </li>
+    <li class="menu-item {% if request.path == '/myadmin/view_chairman/' %}active{% endif %}">
+      <a href="/myadmin/view_chairman/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user"></i>
 
 
-           <li class="menu-item {% if request.path == '/myadmin/all_meeting/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_meeting' %}active{% endif %}">
-            <a href="/myadmin/all_meeting/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-calendar"></i>
-              <div data-i18n="Analytics">All Meetings</div>
-            </a>
-          </li>
+        <div data-i18n="Analytics">View Chairman</div>
+      </a>
+    </li>
 
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Maintenance</span>
-          </li>
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Member</span>
+    </li>
 
-       
+    <li
+      class="menu-item {% if request.path == '/myadmin/view_member/' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %}">
+      <a href="/myadmin/view_member/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user-circle"></i>
+        <div data-i18n="Analytics">All Members</div>
+      </a>
+    </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/paid_maintenance/' %}active{% endif %}">
-            <a href="/myadmin/paid_maintenance/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
-              <div data-i18n="Analytics">Paid Maintenance</div>
-            </a>
-          </li>
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Event</span>
+    </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/all_maintenance/' %}active{% endif %}">
-            <a href="/myadmin/all_maintenance/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-wallet"></i>
-              <div data-i18n="Analytics">All Maintenance</div>
-            </a>
-          </li>
 
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Complaints</span>
-          </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/all_complaints/' %}active{% endif %} {% if request.resolver_match.url_name == 'complaint_details' %}active{% endif %} ">
-            <a href="/myadmin/all_complaints/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-envelope"></i>
-              <div data-i18n="Analytics">All Complaints</div>
-            </a>
-          </li>
+    <li
+      class="menu-item {% if request.path == '/myadmin/all_events/' %}active{% endif %}  {% if request.resolver_match.url_name == 'edit_event' %}active{% endif %}">
+      <a href="/myadmin/all_events/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-calendar-event"></i>
+        <div data-i18n="Analytics">All Events</div>
+      </a>
+    </li>
 
-            <li class="menu-header small text-uppercase">
-             <span class="menu-header-text">Report</span>
-          </li>
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Meeting</span>
+    </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/customer_report/' %}active{% endif %}">
-            <a href="/myadmin/customer_report/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-envelope"></i>
-              <div data-i18n="Analytics">Member Report</div>
-            </a>
-          </li>
-          <li class="menu-item {% if request.path == '/myadmin/maintenance_report/' %}active{% endif %}">
-            <a href="/myadmin/maintenance_report/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-envelope"></i>
-              <div data-i18n="Analytics">Maintenance Payment Report</div>
-            </a>
-          </li>
-        <li class="menu-item {% if request.path == '/myadmin/event_report/' %}active{% endif %}">
-            <a href="/myadmin/event_report/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-envelope"></i>
-              <div data-i18n="Analytics">Event Payment Report</div>
-            </a>
-          </li>
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text"></span>
-          </li>
 
-          <li class="menu-item {% if request.path == '/myadmin/users/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
-            <a href="/myadmin/logout/" class="menu-link">
-              <i class="menu-icon tf-icons bx bx-power-off"></i>
-              <div data-i18n="Analytics">Logout</div>
-            </a>
-          </li>
-        </ul>
-      </aside>
+    <li
+      class="menu-item {% if request.path == '/myadmin/all_meeting/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_meeting' %}active{% endif %}">
+      <a href="/myadmin/all_meeting/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-calendar"></i>
+        <div data-i18n="Analytics">All Meetings</div>
+      </a>
+    </li>
+
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Maintenance</span>
+    </li>
+
+
+
+    <li class="menu-item {% if request.path == '/myadmin/paid_maintenance/' %}active{% endif %}">
+      <a href="/myadmin/paid_maintenance/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
+        <div data-i18n="Analytics">Paid Maintenance</div>
+      </a>
+    </li>
+
+    <li class="menu-item {% if request.path == '/myadmin/all_maintenance/' %}active{% endif %}">
+      <a href="/myadmin/all_maintenance/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-wallet"></i>
+        <div data-i18n="Analytics">All Maintenance</div>
+      </a>
+    </li>
+
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Complaints</span>
+    </li>
+
+    <li
+      class="menu-item {% if request.path == '/myadmin/all_complaints/' %}active{% endif %} {% if request.resolver_match.url_name == 'complaint_details' %}active{% endif %} ">
+      <a href="/myadmin/all_complaints/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-envelope"></i>
+        <div data-i18n="Analytics">All Complaints</div>
+      </a>
+    </li>
+
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Report</span>
+    </li>
+
+    <li class="menu-item {% if request.path == '/myadmin/customer_report/' %}active{% endif %}">
+      <a href="/myadmin/customer_report/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-envelope"></i>
+        <div data-i18n="Analytics">Member Report</div>
+      </a>
+    </li>
+    <li class="menu-item {% if request.path == '/myadmin/maintenance_report/' %}active{% endif %}">
+      <a href="/myadmin/maintenance_report/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-envelope"></i>
+        <div data-i18n="Analytics">Maintenance Payment Report</div>
+      </a>
+    </li>
+    <li class="menu-item {% if request.path == '/myadmin/event_report/' %}active{% endif %}">
+      <a href="/myadmin/event_report/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-envelope"></i>
+        <div data-i18n="Analytics">Event Payment Report</div>
+      </a>
+    </li>
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text"></span>
+    </li>
+
+    <li
+      class="menu-item {% if request.path == '/myadmin/users/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
+      <a href="/myadmin/logout/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-power-off"></i>
+        <div data-i18n="Analytics">Logout</div>
+      </a>
+    </li>
+  </ul>
+</aside>

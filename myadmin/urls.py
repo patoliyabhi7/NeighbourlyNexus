@@ -40,6 +40,10 @@ urlpatterns = [
     path('complaint_details/<int:id>', views.complaint_details, name='complaint_details'),
     path('paid_maintenance/', views.paid_maintenance, name='paid_maintenance'),
     path('paid_maintenance_details/<int:id>', views.paid_maintenance_details, name='paid_maintenance_details'),
+    path('edit_chairman/<int:id>', views.edit_chairman, name='edit_chairman'),
+    path('update_chairman/<int:id>', views.update_chairman, name='update_chairman'),
+    path('remove_event/<int:id>', views.remove_event, name='remove_event'),
+    path('remove_meeting/<int:id>', views.remove_meeting, name='remove_meeting'),
 
 
     path('customer_report/', views.customer_report, name='customer_report'),

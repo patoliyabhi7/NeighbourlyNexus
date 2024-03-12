@@ -34,9 +34,22 @@ def login_check(request):
         print('Invalid username or password')
         return redirect('/myadmin/login/')
 
-    else:
-        auth.login(request, result)
-        return redirect('/myadmin/dashboard/')
+    else: 
+        if Member.objects.filter(user_id=result.id).exists():
+            messages.error(request, 'Invalid User..Try Again')
+            return redirect('/myadmin/dashboard/')
+            # auth.login(request, result)
+            # return redirect('/myadmin/dashboard/')
+
+        elif Chairman.objects.filter(user_id=result.id).exists():
+            messages.error(request, 'Invalid User..Try Again')
+            return redirect('/myadmin/dashboard/')
+
+        else:
+            auth.login(request, result)
+            return redirect('/myadmin/dashboard/')
+            # messages.error(request, 'Invalid User..Try Again')
+            # return redirect('/myadmin/dashboard/')
 
 def logout(request):
 

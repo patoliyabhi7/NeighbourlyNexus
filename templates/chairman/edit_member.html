@@ -3,7 +3,7 @@
 
 
 {% block content %}
-<form method="post" action="#" enctype="multipart/form-data">
+<form method="post" action="/chairman/update_member/{{result.id}}" enctype="multipart/form-data">
   {% csrf_token %}
 <div class="content-wrapper">
   <!-- Content -->

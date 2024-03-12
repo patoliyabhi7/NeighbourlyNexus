@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.models import User
 from myadmin.models import *
 from chairman.models import *
@@ -13,8 +13,10 @@ from datetime import datetime, date
 from django.template.loader import render_to_string
 from .process import html_to_pdf 
 from django.views.generic import View
-
-
+from django.contrib.auth.decorators import login_required
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import re
 
 def login(request):
     context={}
@@ -31,10 +33,20 @@ def login_check(request):
         print('Invalid username or password')
         return redirect('/chairman/login/')
 
-    else:
-        auth.login(request, result)
-        return redirect('/chairman/dashboard/')
+    else: 
+        if Chairman.objects.filter(user_id=result.id).exists():
+            auth.login(request, result)
+            return redirect('/chairman/dashboard/')
 
+        elif Member.objects.filter(user_id=result.id).exists():
+            messages.error(request, 'Invalid User..Try Again')
+            return redirect('/chairman/dashboard/')
+
+        else:
+            messages.error(request, 'Invalid User..Try Again')
+            return redirect('/chairman/dashboard/')
+
+@login_required(login_url='/chairman/login/')
 def dashboard(request):
     id = request.user.id
     print(id)
@@ -51,26 +63,70 @@ def add_member(request):
     return render(request, 'chairman/add_member.html', context)
 
 def store_member(request):
-    first_name = request.POST['first_name']
-    last_name = request.POST['last_name']
-    username = request.POST['username']
-    password = request.POST['password']
-    cpassword = request.POST['cpassword']
-    email = request.POST['email']
+    first_name = request.POST.get('first_name', '').strip()
+    last_name = request.POST.get('last_name', '').strip()
+    username = request.POST.get('username', '').strip()
+    password = request.POST.get('password', '').strip()
+    cpassword = request.POST.get('cpassword', '').strip()
+    email = request.POST.get('email', '').strip()
+    gender = request.POST.get('gender', '').strip()
+    phone = request.POST.get('phone', '').strip()
 
-    gender = request.POST['gender']
-    phone = request.POST['phone']
-    house_no = request.POST['house_no']
-    total_members = request.POST['total_members']
+    house_no = request.POST.get('house_no', '').strip()
+    total_members = request.POST.get('total_members', '').strip()
 
-    if password == cpassword:
-        user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
+    if not (first_name and last_name and username and password and cpassword and email and gender and phone and house_no and total_members):
+        # Check if any field is empty
+        print('All fields are required.')
+        messages.success(request, 'All fields are required.')
+        return redirect('/chairman/add_member/')
 
-        Member.objects.create(gender=gender,phone=phone,house_no=house_no,total_members=total_members ,reg_date=date.today(),user_id=user.id)
-        return redirect('/chairman/view_member/')
-
-    else:
+    if password != cpassword:
+        # Check if password and confirm password match
         print('Password and confirm password mismatched')
+        messages.success(request, 'Password and confirm password mismatched')
+        return redirect('/chairman/add_member/')
+
+    if User.objects.filter(username=username).exists():
+        # Check if username already exists
+        print('Username already exists')
+        messages.success(request, 'Username already exists')
+        return redirect('/chairman/add_member/')
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        print('Invalid email address')
+        messages.success(request, 'Invalid email address')
+        return redirect('/chairman/add_member/')
+
+    # Validate phone number format
+    if not re.match(r'^\+?1?\d{9,15}$', phone):
+        print('Invalid phone number format')
+        messages.success(request, 'Invalid phone number format')
+        return redirect('/chairman/add_member/')
+
+    if len(password) < 8:
+        print('Password should be at least 8 characters long')
+        messages.success(request, 'Password should be at least 8 characters long')
+        return redirect('/chairman/add_member/')
+    elif not any(char.isdigit() for char in password):
+        print('Password should contain at least one digit')
+        messages.success(request, 'Password should contain at least one digit')
+        return redirect('/chairman/add_member/')
+    elif not any(char.isupper() for char in password):
+        print('Password should contain at least one uppercase letter')
+        messages.success(request, 'Password should contain at least one uppercase letter')
+        return redirect('/chairman/add_member/')
+    elif not any(char.islower() for char in password):
+        print('Password should contain at least one lowercase letter')
+        messages.success(request, 'Password should contain at least one lowercase letter')
+        return redirect('/chairman/add_member/')
+
+    user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
+    Member.objects.create(gender=gender,phone=phone,house_no=house_no,total_members=total_members ,reg_date=date.today(),user_id=user.id)
+
+    return redirect('/chairman/view_member/')
 
 def view_member(request):
     result = Member.objects.all()
@@ -100,36 +156,39 @@ def edit_member(request, id):
     context = {'result':result}
     return render(request, 'chairman/edit_member.html', context)
 
-# def update_member(request, id):
-#     first_name = request.POST['first_name']
-#     last_name = request.POST['last_name']
-#     username = request.POST['username']
-#     email = request.POST['email']
+def update_member(request, id):
+    first_name = request.POST['first_name']
+    last_name = request.POST['last_name']
+    username = request.POST['username']
+    email = request.POST['email']
 
-#     gender = request.POST['gender']
-#     phone = request.POST['phone']
-#     house_no = request.POST['house_no']
-#     total_members = request.POST['total_members']
+    gender = request.POST['gender']
+    phone = request.POST['phone']
+    house_no = request.POST['house_no']
+    total_members = request.POST['total_members']
 
-#     data = {
-#             'first_name' : first_name,
-#             'last_name' : last_name,
-#             'username' : username,
-#             'email' : email
-#         }
-#     user = User.objects.update_or_create(pk=id,defaults=data)
+    result_2 = Member.objects.get(pk=id)
+    table_id = result_2.user_id
 
-#     data2 = {
-#             'gender' : gender,
-#             'phone' : phone,
-#             'house_no' : house_no,
-#             'total_members' : total_members,
-#             'reg_date' : Member.objects.get(pk=id).reg_date
-# ,
-#         }
-#     Member.objects.update_or_create(user_id=id,defaults=data2)
+    data = {
+            'first_name' : first_name,
+            'last_name' : last_name,
+            'username' : username,
+            'email' : email
+        }
+    user = User.objects.update_or_create(pk=table_id,defaults=data)
 
-#     return redirect('/chairman/view_member/')
+    data2 = {
+            'gender' : gender,
+            'phone' : phone,
+            'house_no' : house_no,
+            'total_members' : total_members,
+            'reg_date' : Member.objects.get(pk=id).reg_date
+,
+        }
+    Member.objects.update_or_create(pk=id,defaults=data2)
+
+    return redirect('/chairman/view_member/')
 
 def add_event(request):
 
@@ -137,18 +196,38 @@ def add_event(request):
     return render(request, 'chairman/add_event.html', context)
 
 def store_event(request):
+    if 'title' not in request.POST or 'description' not in request.POST or 'from_date' not in request.POST or 'to_date' not in request.POST or 'price' not in request.POST or 'image' not in request.FILES:
+        return HttpResponseBadRequest("Missing required fields")
+
     title = request.POST['title']
     description = request.POST['description']
     from_date = request.POST['from_date']
     to_date = request.POST['to_date']
     price = request.POST['price']
 
-    image = request.FILES['image']
+    if not title or not description or not from_date or not to_date or not price:
+        return HttpResponseBadRequest("Empty values are not allowed")
+
+    try:
+        image = request.FILES['image']
+    except KeyError:
+        return HttpResponseBadRequest("Image file is missing")
+
+    if not image.name:
+        return HttpResponseBadRequest("Image file name is missing")
+
     myloc = os.path.join(settings.MEDIA_ROOT, 'chairman')
     obj = FileSystemStorage(location=myloc)
-    obj.save(image.name, image)
 
-    Event.objects.create(title=title,description=description,from_date=from_date,to_date=to_date,price=price,image=image.name)
+    try:
+        obj.save(image.name, image)
+    except Exception as e:
+        return HttpResponseBadRequest("Error saving image file: " + str(e))
+
+    try:
+        Event.objects.create(title=title, description=description, from_date=from_date, to_date=to_date, price=price, image=image.name)
+    except Exception as e:
+        return HttpResponseBadRequest("Error creating event: " + str(e))
 
     return redirect('/chairman/all_events/')
 
@@ -354,21 +433,6 @@ def status_maintenance(request):
     else:
         context = {}
     return render(request, 'chairman/status_maintenance.html', context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

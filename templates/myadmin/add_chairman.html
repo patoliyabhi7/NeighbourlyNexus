@@ -5,94 +5,101 @@
 {% block content %}
 <form method="post" action="/myadmin/store_chairman/" enctype="multipart/form-data">
   {% csrf_token %}
-<div class="content-wrapper">
-  <!-- Content -->
+  <div class="content-wrapper">
+    <!-- Content -->
 
-  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-xxl flex-grow-1 container-p-y">
 
-    <div class="row">
-      <div class="col-12">
-        <!-- HTML5 Inputs -->
-        <div class="card mb-4">
-          <h5 class="card-header">Add Chairman</h5>
-          <div class="card-body">
-
-            <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">First Name</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="first_name" name="first_name" />
-              </div>
-            </div>
-
-             <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Last Name</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="last_name" name="last_name" />
-              </div>
-            </div>
-           
-             <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Username</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="username" name="username" />
-              </div>
-            </div>
-
-             <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Email</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="email" name="email" />
-              </div>
-            </div>
-
-             <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Password</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="password" name="password" />
-              </div>
-            </div>
-
-            <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Confirm Password</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="cpassword" name="cpassword" />
-              </div>
-            </div>
-
-            <div class=" mb-3 row">
-              <div class="col-2">
-                <label for="" class="form-label">Gender</label>
-              </div>
-              <div class="col-2">
-                <div class="form-check ">
-                  <input class="form-check-input" value="male" type="radio" id="male" name="gender"/>
-                  <label class="form-check-label" for="defaultRadio1"> Male </label>
+      <div class="row">
+        <div class="col-12">
+          <!-- HTML5 Inputs -->
+          <div class="card mb-4">
+            <h5 class="card-header">Add Chairman</h5>
+            
+            <div class="card-body">
+              {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+              {% endif %}
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">First Name</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="first_name" name="first_name" />
                 </div>
               </div>
-              <div class="col-2">
-                <div class="form-check ">
-                  <input class="form-check-input" value="female" type="radio" id="female" name="gender"/>
-                  
-                  <label class="form-check-label" for="defaultRadio1"> Female </label>
+
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Last Name</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="last_name" name="last_name" />
                 </div>
               </div>
-            </div>
 
-            <div class="mb-3 row">
-              <label for="" class="col-md-2 col-form-label form-inline">Phone</label>
-              <div class="col-5"> 
-                <input class="form-control" type="text" id="phone" name="phone" />
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Username</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="username" name="username" />
+                </div>
               </div>
-            </div>
 
-            <div class="col-sm-10">
-              <input type="submit" class="btn btn-primary"/>
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Email</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="email" name="email" />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Password</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="password" name="password" />
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Confirm Password</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="cpassword" name="cpassword" />
+                </div>
+              </div>
+
+              <div class=" mb-3 row">
+                <div class="col-2">
+                  <label for="" class="form-label">Gender</label>
+                </div>
+                <div class="col-2">
+                  <div class="form-check ">
+                    <input class="form-check-input" value="male" type="radio" id="male" name="gender" />
+                    <label class="form-check-label" for="defaultRadio1"> Male </label>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="form-check ">
+                    <input class="form-check-input" value="female" type="radio" id="female" name="gender" />
+
+                    <label class="form-check-label" for="defaultRadio1"> Female </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="" class="col-md-2 col-form-label form-inline">Phone</label>
+                <div class="col-5">
+                  <input class="form-control" type="text" id="phone" name="phone" />
+                </div>
+              </div>
+
+              <div class="col-sm-10">
+                <input type="submit" class="btn btn-primary" />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </form>
 {% endblock %}

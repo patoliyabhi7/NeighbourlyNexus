@@ -36,7 +36,7 @@
       </a>
     </li>
 
-    <li class="menu-item {% if request.path == '/myadmin/view_chairman/' %}active{% endif %}">
+    <li class="menu-item {% if request.path == '/myadmin/view_chairman/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_chairman' %}active{% endif %}">
       <a href="/myadmin/view_chairman/" class="menu-link">
         <i class="menu-icon tf-icons bx bx-user"></i>
 

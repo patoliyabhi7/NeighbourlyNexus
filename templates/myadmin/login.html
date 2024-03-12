@@ -15,6 +15,7 @@
                    <img src="{% static 'myadmin//assets/img/favicon/logo3.png' %}" width="300px">
                 </a>
               </div>
+              
               <!-- /Logo -->
               <h4 class="mb-2">Welcome Admin!</h4>
 
@@ -29,13 +30,13 @@
               <form id="formAuthentication" class="mb-3" action="/myadmin/login_check/" method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email or Username</label>
+                  <label for="email" class="form-label">Username</label>
                   <input
                     type="text"
                     class="form-control"
                     id="username"
                     name="username"
-                    placeholder="Enter your email or username"
+                    placeholder="Enter your username"
                     autofocus
                   />
                 </div>

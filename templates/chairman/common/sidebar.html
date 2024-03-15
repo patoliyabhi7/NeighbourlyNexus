@@ -90,7 +90,7 @@
             </a>
           </li>
 
-          <li class="menu-item {% if request.path == '/chairman/paid_maintenance/' %}active{% endif %}">
+          <li class="menu-item {% if request.path == '/chairman/paid_maintenance/' %}active{% endif %} {% if request.resolver_match.url_name == 'search_maintenance' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %} {% if request.resolver_match.url_name == 'paid_maintenance_details' %}active{% endif %}">
             <a href="/chairman/paid_maintenance/" class="menu-link">
               <i class="menu-icon tf-icons bx bx-credit-card-front"></i>
               <div data-i18n="Analytics">Search Paid Maintenance</div>

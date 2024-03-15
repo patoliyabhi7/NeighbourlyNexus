@@ -17,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.dateparse import parse_date
 
 def login(request):
     context={}
@@ -54,14 +56,17 @@ def dashboard(request):
     context={'result' : result}
     return render(request, 'chairman/dashboard.html', context)
 
+@login_required(login_url='/chairman/login/')
 def logout(request):
     auth.logout(request)
     return redirect('/chairman/login/')
 
+@login_required(login_url='/chairman/login/')
 def add_member(request):
     context = {}
     return render(request, 'chairman/add_member.html', context)
 
+@login_required(login_url='/chairman/login/')
 def store_member(request):
     first_name = request.POST.get('first_name', '').strip()
     last_name = request.POST.get('last_name', '').strip()
@@ -128,18 +133,21 @@ def store_member(request):
 
     return redirect('/chairman/view_member/')
 
+@login_required(login_url='/chairman/login/')
 def view_member(request):
     result = Member.objects.all()
     context = {'result':result}
 
     return render(request, 'chairman/view_member.html', context)
 
+@login_required(login_url='/chairman/login/')
 def member_details(request, id):
     result = Member.objects.get(pk=id)
 
     context = {'result':result, 'id':id}
     return render(request, 'chairman/member_details.html', context)
 
+@login_required(login_url='/chairman/login/')
 def remove_member(request, id):
     result = Member.objects.get(pk=id)
     result2 = User.objects.get(pk=result.user_id)
@@ -150,12 +158,14 @@ def remove_member(request, id):
 
     return redirect('/chairman/view_member/')
 
+@login_required(login_url='/chairman/login/')
 def edit_member(request, id):
     result = Member.objects.get(pk=id)
 
     context = {'result':result}
     return render(request, 'chairman/edit_member.html', context)
 
+@login_required(login_url='/chairman/login/')
 def update_member(request, id):
     first_name = request.POST['first_name']
     last_name = request.POST['last_name']
@@ -176,7 +186,8 @@ def update_member(request, id):
             'username' : username,
             'email' : email
         }
-    user = User.objects.update_or_create(pk=table_id,defaults=data)
+    user = User.objects.update_or_create(pk=table_id,
+    defaults=data)
 
     data2 = {
             'gender' : gender,
@@ -184,20 +195,22 @@ def update_member(request, id):
             'house_no' : house_no,
             'total_members' : total_members,
             'reg_date' : Member.objects.get(pk=id).reg_date
-,
         }
-    Member.objects.update_or_create(pk=id,defaults=data2)
+    Member.objects.update_or_create(pk=id, defaults=data2)
 
     return redirect('/chairman/view_member/')
 
+@login_required(login_url='/chairman/login/')
 def add_event(request):
 
     context = {}
     return render(request, 'chairman/add_event.html', context)
 
+@login_required(login_url='/chairman/login/')
 def store_event(request):
     if 'title' not in request.POST or 'description' not in request.POST or 'from_date' not in request.POST or 'to_date' not in request.POST or 'price' not in request.POST or 'image' not in request.FILES:
-        return HttpResponseBadRequest("Missing required fields")
+        messages.success(request, 'All fields are required.')
+        return redirect('/chairman/add_event/')
 
     title = request.POST['title']
     description = request.POST['description']
@@ -224,25 +237,25 @@ def store_event(request):
     except Exception as e:
         return HttpResponseBadRequest("Error saving image file: " + str(e))
 
-    try:
-        Event.objects.create(title=title, description=description, from_date=from_date, to_date=to_date, price=price, image=image.name)
-    except Exception as e:
-        return HttpResponseBadRequest("Error creating event: " + str(e))
+    Event.objects.create(title=title, description=description, from_date=from_date, to_date=to_date, price=price, image=image.name)
 
     return redirect('/chairman/all_events/')
 
+@login_required(login_url='/chairman/login/')
 def all_events(request):
     result = Event.objects.all()
 
     context = {'result':result}
     return render(request, 'chairman/all_events.html', context)
 
+@login_required(login_url='/chairman/login/')
 def remove_event(request, id):
     result = Event.objects.get(pk=id)
     print(result.title)
     result.delete()
     return redirect('/chairman/all_events/')
 
+@login_required(login_url='/chairman/login/')
 def edit_event(request, id):
     result = Event.objects.get(pk=id)
 
@@ -255,6 +268,7 @@ def edit_event(request, id):
     context = {'result':result,'from_date':from_date,'to_date':to_date}
     return render(request, 'chairman/edit_event.html', context)
 
+@login_required(login_url='/chairman/login/')
 def update_event(request, id):
     title = request.POST['title']
     description = request.POST['description']
@@ -279,31 +293,52 @@ def update_event(request, id):
     Event.objects.update_or_create(pk=id, defaults=data)
     return redirect('/chairman/all_events/')
 
+@login_required(login_url='/chairman/login/')
 def schedule_meeting(request):
 
     context = {}
     return render(request, 'chairman/schedule_meeting.html', context)
 
+@login_required(login_url='/chairman/login/')
 def store_meeting(request):
+    if 'subject' not in request.POST or 'venue' not in request.POST or 'date' not in request.POST or 'time' not in request.POST:
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/schedule_meeting/')
+
     subject = request.POST['subject']
     venue = request.POST['venue']
-    date = request.POST['date']
-    time = request.POST['time']
+    date_str = request.POST['date']
+    time_str = request.POST['time']
 
-    Meeting.objects.create(subject=subject, venue=venue, date=date, time=time)
+    if date_str == "" or time_str == "":
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/schedule_meeting/')
+
+    # Combine date and time strings into a datetime object
+    meeting_datetime = datetime.strptime(date_str + ' ' + time_str, '%Y-%m-%d %H:%M')
+
+    # Check if the meeting datetime is in the future
+    if meeting_datetime <= datetime.now():
+        messages.error(request, 'Scheduled date and time must be in the future.')
+        return redirect('/chairman/schedule_meeting/')
+
+    Meeting.objects.create(subject=subject, venue=venue, date=date_str, time=time_str)
     return redirect('/chairman/all_meeting/')
 
+@login_required(login_url='/chairman/login/')
 def all_meeting(request):
     result = Meeting.objects.all()
     context = {'result':result}
     return render(request, 'chairman/all_meeting.html', context)
 
+@login_required(login_url='/chairman/login/')
 def remove_meeting(request, id):
     result = Meeting.objects.get(pk=id)
     print(result.subject)
     result.delete()
     return redirect('/chairman/all_meeting/')
 
+@login_required(login_url='/chairman/login/')
 def edit_meeting(request, id):
     result = Meeting.objects.get(pk=id)
 
@@ -313,6 +348,7 @@ def edit_meeting(request, id):
     context = {'result':result}
     return render(request, 'chairman/edit_meeting.html', context)
 
+@login_required(login_url='/chairman/login/')
 def update_meeting(request, id):
     subject = request.POST['subject']
     venue = request.POST['venue']
@@ -329,38 +365,67 @@ def update_meeting(request, id):
     Meeting.objects.update_or_create(pk=id, defaults=data)
     return redirect('/chairman/all_meeting/')
 
+@login_required(login_url='/chairman/login/')
 def add_maintenance(request):
 
     context = {}
     return render(request, 'chairman/add_maintenance.html', context)
 
+@login_required(login_url='/chairman/login/')
 def store_maintenance(request):
+    if 'year' not in request.POST or 'from_date' not in request.POST or 'to_date' not in request.POST or 'amount' not in request.POST or 'description' not in request.POST:
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/add_maintenance/')
+
     year = request.POST['year']
-    from_date = request.POST['from_date']
-    to_date = request.POST['to_date']
+    from_date_str = request.POST['from_date']
+    to_date_str = request.POST['to_date']
     amount = request.POST['amount']
     description = request.POST['description']
 
-    Maintenance.objects.create(year=year,description=description,from_date=from_date,to_date=to_date,amount=amount)
+    if from_date_str == "" or to_date_str == "":
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/add_maintenance/')
+
+    # Convert date strings to datetime objects
+    from_date = datetime.strptime(from_date_str, '%Y-%m-%d')
+    to_date = datetime.strptime(to_date_str, '%Y-%m-%d')
+
+    # Check if from_date and to_date are in the future
+    current_year = datetime.now().year
+    if int(year) < current_year or to_date < datetime.now():
+        messages.error(request, 'Year and Maintenance dates must be in the future.')
+        return redirect('/chairman/add_maintenance/')
+
+    # Check if to_date is after from_date
+    if to_date <= from_date:
+        messages.error(request, 'End date must be after start date.')
+        return redirect('/chairman/add_maintenance/')
+
+    Maintenance.objects.create(year=year, description=description, from_date=from_date_str, to_date=to_date_str, amount=amount)
 
     return redirect('/chairman/all_maintenance/')
 
+@login_required(login_url='/chairman/login/')
 def all_maintenance(request):
     result = Maintenance.objects.all()
 
     context = {'result':result}
     return render(request, 'chairman/all_maintenance.html', context)
 
+@login_required(login_url='/chairman/login/')
 def remove_maintenance(request, id):
     result = Maintenance.objects.get(pk=id)
     result.delete()
     return redirect('/chairman/all_maintenance/')
 
+@login_required(login_url='/chairman/login/')
 def edit_maintenance(request, id):
     result = Maintenance.objects.get(pk=id)
     context = {'result':result}
     return render(request, 'chairman/edit_maintenance.html', context)
 
+@login_required(login_url='/chairman/login/')
 def update_maintenance(request, id):
     year = request.POST['year']
     from_date = request.POST['from_date']
@@ -378,18 +443,21 @@ def update_maintenance(request, id):
     Maintenance.objects.update_or_create(pk=id, defaults=data)
     return redirect('/chairman/all_maintenance/')
 
+@login_required(login_url='/chairman/login/')
 def all_complaints(request):
     result = Complain.objects.all()
 
     context = {'result':result}
     return render(request, 'chairman/all_complaints.html', context)
 
+@login_required(login_url='/chairman/login/')
 def complaint_details(request, id):
     result = Complain.objects.get(pk=id)
 
     context = {'result':result}
     return render(request, 'chairman/complaint_details.html', context)
 
+@login_required(login_url='/chairman/login/')
 def remove_complaint(request, id):
     result = Complain.objects.get(pk=id)
     print(result.subject)
@@ -397,18 +465,21 @@ def remove_complaint(request, id):
     return redirect('/chairman/all_complaints/')
 
 
+@login_required(login_url='/chairman/login/')
 def paid_maintenance(request):
     result = Maintenance_Payment.objects.all()
 
     context = {'result':result}
     return render(request, 'chairman/paid_maintenance.html', context)
 
+@login_required(login_url='/chairman/login/')
 def paid_maintenance_details(request,id):
     result = Maintenance_Payment.objects.get(pk=id)
 
     context = {'result':result}
     return render(request, 'chairman/paid_maintenance_details.html', context)
 
+@login_required(login_url='/chairman/login/')
 def search_maintenance(request):
     month = request.POST['month']
     year = request.POST['year']
@@ -416,44 +487,63 @@ def search_maintenance(request):
     context = {'result2':result2,'month':month,'year':year}
     return render(request, 'chairman/search_maintenance.html', context)
 
+@login_required(login_url='/chairman/login/')
 def status_maintenance(request):
     if request.method == 'POST':
-        status = request.POST['status']
-        year = request.POST['year']
-        m = Maintenance.objects.get(year=year)
+        status = request.POST.get('status')
+        year = request.POST.get('year')
         
+        try:
+            m = Maintenance.objects.get(year=year)
+        except Maintenance.DoesNotExist:
+            messages.error(request, f"No Maintenance found for the year {year}")
+            return redirect('/chairman/status_maintenance/')  # Provide the appropriate redirect URL
+
         if status == 'due':
             mp = Maintenance_Payment.objects.only('id').filter(maintenance_id=m.id)
             result = Member.objects.exclude(id__in=mp)
-
         else:
             result = Maintenance_Payment.objects.filter(maintenance_id=m.id)
 
-        context = {'result':result, 'status':status,'year':year,'m':m}
+        context = {'result': result, 'status': status, 'year': year, 'm': m}
     else:
         context = {}
     return render(request, 'chairman/status_maintenance.html', context)
 
-
-
-
+@login_required(login_url='/chairman/login/')
 def customer_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Member.objects.filter(reg_date__gte=from_date,reg_date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/chairman/customer_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/chairman/customer_report/')  # Redirect to the appropriate view
+        
+        result = Member.objects.filter(reg_date__gte=from_date, reg_date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Member.objects.all()}
-    return render(request,'chairman/customer_report.html',context)
+        context = {'user': Member.objects.all()}
+        
+    return render(request, 'chairman/customer_report.html', context)
 
 #Creating a class based view
 class GeneratePdf(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']
@@ -468,23 +558,40 @@ class GeneratePdf(View):
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
 
+@login_required(login_url='/chairman/login/')
 def maintenance_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Maintenance_Payment.objects.filter(date__gte=from_date,date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/chairman/maintenance_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/chairman/maintenance_report/')  # Redirect to the appropriate view
+        
+        result = Maintenance_Payment.objects.filter(date__gte=from_date, date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Maintenance_Payment.objects.all()}
-    return render(request,'chairman/maintenance_report.html',context)
+        context = {'user': Maintenance_Payment.objects.all()}
+        
+    return render(request, 'chairman/maintenance_report.html', context)
 
 #Creating a class based view
 class GeneratePdf2(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']
@@ -499,23 +606,40 @@ class GeneratePdf2(View):
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
 
+@login_required(login_url='/chairman/login/')
 def event_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Event_Payment.objects.filter(date__gte=from_date,date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/chairman/event_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/chairman/event_report/')  # Redirect to the appropriate view
+        
+        result = Event_Payment.objects.filter(date__gte=from_date, date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Event_Payment.objects.all()}
-    return render(request,'chairman/event_report.html',context)
+        context = {'user': Event_Payment.objects.all()}
+        
+    return render(request, 'chairman/event_report.html', context)
 
 #Creating a class based view
 class GeneratePdf3(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']

@@ -46,7 +46,13 @@
     <div class="table-responsive text-nowrap">
       <table class="table">
         <thead>
-
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
           <tr>
             <!-- <th>Id</th> -->
             <th><i class="me-1"></i>Sr No.</th>

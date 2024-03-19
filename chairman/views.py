@@ -43,11 +43,11 @@ def login_check(request):
 
         elif Member.objects.filter(user_id=result.id).exists():
             messages.error(request, 'Invalid User..Try Again')
-            return redirect('/chairman/dashboard/')
+            return redirect('/chairman/login/')
 
         else:
             messages.error(request, 'Invalid User..Try Again')
-            return redirect('/chairman/dashboard/')
+            return redirect('/chairman/login/')
 
 @login_required(login_url='/chairman/login/')
 def dashboard(request):

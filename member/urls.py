@@ -41,10 +41,11 @@ urlpatterns = [
     path('update_complaint/<int:id>', views.update_complaint, name='update_complaint'),
 
     path('make_payment/<int:id>', views.make_payment, name='make_payment'),
+    path('update_profile/<int:id>', views.update_profile, name='update_profile'),
     path('make_payment_event/<int:id>', views.make_payment_event, name='make_payment_event'),
     path('success/', views.success, name='success'),
     path('r_details/<int:id>/<int:id2>', views.r_details, name='r_details'),
-    path('r_details_event/<int:id>', views.r_details_event, name='r_details_event'),
+    path('r_details_event/<int:id>/<int:id2>', views.r_details_event, name='r_details_event'),
     path('paid_maintenance/', views.paid_maintenance, name='paid_maintenance'),
     path('paid_event/', views.paid_event, name='paid_event'),
     path('random-quote/', views.get_random_quote, name='random-quote'),

@@ -14,6 +14,7 @@ import razorpay
 from django.views.decorators.csrf import csrf_exempt
 import random
 import json
+from django.contrib.auth.decorators import login_required
 
 # from razorpay.utils import verify_payment_signature
 
@@ -34,9 +35,19 @@ def login_check(request):
         return redirect('/member/login/')
 
     else:
-        auth.login(request, result)
-        return redirect('/member/dashboard/')
+        if Member.objects.filter(user_id=result.id).exists():
+            auth.login(request, result)
+            return redirect('/member/dashboard/')
 
+        elif Chairman.objects.filter(user_id=result.id).exists():
+            messages.error(request, 'Invalid User. This is Member portal')
+            return redirect('/member/login/')
+
+        else:
+            messages.error(request, 'Invalid User..Try Again')
+            return redirect('/member/login/')
+
+@login_required(login_url='/member/login/')
 def dashboard(request):
     id = request.user.id
     print(id)
@@ -44,10 +55,12 @@ def dashboard(request):
     context={'result' : result}
     return render(request, 'member/dashboard.html', context)
 
+@login_required(login_url='/member/login/')
 def logout(request):
     auth.logout(request)
     return redirect('/member/login/')
 
+@login_required(login_url='/member/login/')
 def member_details(request):
     id = request.user.id
     result = Member.objects.get(user_id=id)
@@ -55,17 +68,30 @@ def member_details(request):
     context = {'result':result}
     return render(request, 'member/member_details.html', context)
 
+@login_required(login_url='/member/login/')
 def all_events(request):
     result = Event.objects.all()
+
+    id = request.user.id
+    member_data = Member.objects.get(user_id=id)
+
+    for row in result:
+        result1 = Event_Payment.objects.filter(event_id=row.id,member_id=member_data.id )
+        if result1.exists():
+            row.status = 'Paid'
+        else:
+            row.status = 'Unpaid'
 
     context = {'result':result}
     return render(request, 'member/all_events.html', context)
 
+@login_required(login_url='/member/login/')
 def all_meeting(request):
     result = Meeting.objects.all()
     context = {'result':result}
     return render(request, 'member/all_meeting.html', context)
 
+@login_required(login_url='/member/login/')
 def all_maintenance(request):
     # result = Maintenance.objects.all()
     # result2 = Maintenance_Payment.objects.all()
@@ -87,11 +113,13 @@ def all_maintenance(request):
     context = {'result':result}
     return render(request, 'member/all_maintenance.html', context)
 
+@login_required(login_url='/member/login/')
 def complaint(request):
     
     context = {}
     return render(request, 'member/complaint.html', context)
 
+@login_required(login_url='/member/login/')
 def post_complaint(request):
     subject = request.POST['subject']
     description = request.POST['description']
@@ -101,6 +129,7 @@ def post_complaint(request):
     Complain.objects.create(subject=subject,description=description,date_time=datetime.today(),member_id=result)
     return redirect('/member/complaint/')
 
+@login_required(login_url='/member/login/')
 def all_complaints(request):
     id = request.user.id
     id1 = Member.objects.get(user_id=id).id
@@ -109,18 +138,21 @@ def all_complaints(request):
     context = {'result':result, 'id':id1}
     return render(request, 'member/all_complaints.html', context)
 
+@login_required(login_url='/member/login/')
 def remove_complaint(request, id):
     result = Complain.objects.get(pk=id)
     print(result.subject)
     result.delete()
     return redirect('/member/all_complaints/')
 
+@login_required(login_url='/member/login/')
 def edit_complaint(request, id):
     result = Complain.objects.get(pk=id)
     print(id)
     context = {'result':result}
     return render(request, 'member/edit_complaint.html', context)
 
+@login_required(login_url='/member/login/')
 def update_complaint(request, id):
     subject = request.POST['subject']
     description = request.POST['description']
@@ -133,12 +165,14 @@ def update_complaint(request, id):
     Complain.objects.update_or_create(pk=id, defaults=data)
     return redirect('/member/all_complaints/')
 
+@login_required(login_url='/member/login/')
 def edit_profile(request, id):
     result = Member.objects.get(pk=id)
     print(request.user.id)
     context = {'result':result}
     return render(request, 'member/edit_profile.html', context)
 
+@login_required(login_url='/member/login/')
 def update_profile(request, id):
     print(id)
     id1 = request.user.id
@@ -171,12 +205,14 @@ def update_profile(request, id):
 
     return redirect('/member/member_details/')
 
+@login_required(login_url='/member/login/')
 def change_password(request):
     id = request.user.id
     result = User.objects.get(pk=id)
     context = {'result' : result}
     return render(request, 'member/change_password.html', context)
 
+@login_required(login_url='/member/login/')
 def spasse(request):
     username = request.user.username
 
@@ -202,6 +238,7 @@ def spasse(request):
 
 
 
+@login_required(login_url='/member/login/')
 def make_payment(request,id):
     key_id = 'rzp_test_qu1r85W33FbFlf'
     key_secret = 'mNX26pRh92aG5BqjlM9LIHLQ'
@@ -223,7 +260,6 @@ def make_payment(request,id):
         }
     }
     id1 = request.user.id
-    print('The id is ',id1)
     result = User.objects.get(pk=id1)
     result2 = Member.objects.get(user_id=id1).phone
     payment = client.order.create(data=data)
@@ -259,6 +295,7 @@ def r_details(request, id, id2):
     return redirect('/member/success/')
 
 
+@login_required(login_url='/member/login/')
 def paid_maintenance(request):
     id = request.user.id
     result = Member.objects.get(user_id=id).id
@@ -267,9 +304,7 @@ def paid_maintenance(request):
     context = {'result2':result2,'result':result}
     return render(request, 'member/paid_maintenance.html', context)
 
-
-
-
+@login_required(login_url='/member/login/')
 def make_payment_event(request,id):
     key_id = 'rzp_test_qu1r85W33FbFlf'
     key_secret = 'mNX26pRh92aG5BqjlM9LIHLQ'
@@ -280,28 +315,28 @@ def make_payment_event(request,id):
     m_id = result2.id
 
     client = razorpay.Client(auth=(key_id, key_secret))
-
+    id1 = request.user.id
+    user_data = User.objects.get(pk=id1)
     data = {
         'amount': amount*100,
         'currency': 'INR',
         "receipt":"Shivam_Casa",
         "notes":{
-            'name' : 'Abhi',
+            'name' : user_data.first_name,
             'payment_for':'Payment Test'
         }
     }
-    id1 = request.user.id
     result = User.objects.get(pk=id1)
     result2 = Member.objects.get(user_id=id1).phone
     payment = client.order.create(data=data)
-    context = {'payment' : payment,'result':result,'result2':result2,'phone':result2, 'm_id':m_id}
+    context = {'payment' : payment,'result':result,'result2':result2,'phone':result2, 'm_id':m_id,'the_user_id':id1}
     return render(request, 'member/process_payment_event.html',context)
 
 @csrf_exempt
-def r_details_event(request, id):
+def r_details_event(request, id, id2):
 
     print(id)
-    id1 = request.user.id
+    id1 = id
     result = Member.objects.get(user_id=id1).id
 
     order_id = request.POST.get('razorpay_order_id')
@@ -316,11 +351,12 @@ def r_details_event(request, id):
         'razorpay_signature': signature
     })
     print("Success")
-    Event_Payment.objects.create(order_id=order_id,payment_id=payment_id,signature=signature,date=date.today(),date_time=datetime.today(),member_id=result,event_id=id)
+    Event_Payment.objects.create(order_id=order_id,payment_id=payment_id,signature=signature,date=date.today(),date_time=datetime.today(),member_id=result,event_id=id2)
     # Payment is successful, do something here
     return redirect('/member/success/')
 
 
+@login_required(login_url='/member/login/')
 def paid_event(request):
     id = request.user.id
     result = Member.objects.get(user_id=id).id
@@ -329,6 +365,7 @@ def paid_event(request):
     context = {'result2':result2,'result':result}
     return render(request, 'member/paid_event.html', context)
 
+@login_required(login_url='/member/login/')
 def get_random_quote(request):
     with open('quotes.json', 'r') as f:
         quotes_data = json.load(f)
@@ -337,12 +374,14 @@ def get_random_quote(request):
     # print(random_quote)
     return JsonResponse(random_quote)
 
+@login_required(login_url='/member/login/')
 def random_thought(request):
     with open('quotes.json') as f:
         thoughts = json.load(f)
     random_thought = random.choice(thoughts)
     return render(request, 'your_template.html', {'thought': random_thought})
 
+@login_required(login_url='/member/login/')
 def my_view(request):
     random_thought = get_random_thought()  # Function to get a random thought
     print(random_thought)

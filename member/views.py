@@ -223,10 +223,11 @@ def make_payment(request,id):
         }
     }
     id1 = request.user.id
+    print('The id is ',id1)
     result = User.objects.get(pk=id1)
     result2 = Member.objects.get(user_id=id1).phone
     payment = client.order.create(data=data)
-    context = {'payment' : payment,'result':result,'result2':result2,'phone':result2, 'm_id':m_id}
+    context = {'payment' : payment,'result':result,'result2':result2,'phone':result2, 'm_id':m_id,'the_user_id':id1}
     return render(request, 'member/process_payment.html',context)
 
 @csrf_exempt
@@ -235,11 +236,11 @@ def success(request):
     return render(request, 'member/success.html', context)
 
 @csrf_exempt
-def r_details(request, id):
+def r_details(request, id, id2):
 
-    print(id)
-    id1 = request.user.id
-    result = Member.objects.get(user_id=id1).id
+    id1 = id
+    print(id1)
+    result = Member.objects.get(user_id=id1)
 
     order_id = request.POST.get('razorpay_order_id')
     payment_id = request.POST.get('razorpay_payment_id')
@@ -253,7 +254,7 @@ def r_details(request, id):
         'razorpay_signature': signature
     })
     print("Success")
-    Maintenance_Payment.objects.create(order_id=order_id,payment_id=payment_id,signature=signature,date=date.today(),date_time=datetime.today(),member_id=result,maintenance_id=id)
+    Maintenance_Payment.objects.create(order_id=order_id,payment_id=payment_id,signature=signature,date=date.today(),date_time=datetime.today(),member_id=result.id,maintenance_id=id2)
     # Payment is successful, do something here
     return redirect('/member/success/')
 

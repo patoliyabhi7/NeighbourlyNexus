@@ -6,41 +6,47 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
-              <!-- Basic Bootstrap Table -->
-              <div class="card">
-                <h5 class="card-header">All Events</h5>
-                <div class="table-responsive text-nowrap">
-                  <table class="table">
-                    <thead>
+  <!-- Basic Bootstrap Table -->
+  <div class="card">
+    <h5 class="card-header">All Events</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table">
+        <thead>
 
-                      <tr>
-                        <!-- <th>Id</th> -->
-                        <th><i class="me-1"></i>Sr No.</th>
-                        <th>Year</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Pay</th>
-                        <th>  Status</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                      {% for row in result %}
-                      <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{forloop.counter}}</strong></td>
-                        <td>{{row.year}}</td>
-                        <td>{{row.from_date}}</td>
-                        <td>{{row.to_date}}</td>
-                        <td>{{row.amount}}</td>
-                        <td style="white-space:pre-wrap">{{row.description}}</td>
-                        <td>
-                          <a type="button" class="btn btn-primary" href="/member/make_payment/{{row.id}}" style="color:white">
-                              <span class="tf-icons bx bx-credit-card-front"></span>&nbsp; Pay
-                            </a>
-                        </td>
-                        <td>
-                          <!-- {% for row2 in result2 %}
+          <tr>
+            <!-- <th>Id</th> -->
+            <th><i class="me-1"></i>Sr No.</th>
+            <th>Year</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Pay</th>
+            <th> Status</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          {% for row in result %}
+          <tr>
+            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{forloop.counter}}</strong></td>
+            <td>{{row.year}}</td>
+            <td>{{row.from_date}}</td>
+            <td>{{row.to_date}}</td>
+            <td>{{row.amount}}</td>
+            <td style="white-space:pre-wrap">{{row.description}}</td>
+            <td>
+              {% if row.status == 'paid' or row.status == 'Paid' %}
+              <button type="button" class="btn btn-primary" style="color:white;" disabled>
+                <span class="tf-icons bx bx-credit-card-front"></span>&nbsp; Pay
+              </button>
+              {% else %}
+              <a type="button" class="btn btn-primary" href="/member/make_payment/{{ row.id }}" style="color:white;">
+                <span class="tf-icons bx bx-credit-card-front"></span>&nbsp; Pay
+              </a>
+              {% endif %}
+            </td>
+            <td>
+              <!-- {% for row2 in result2 %}
                             {% if row2.member_id == result3 %}
 
                               {% if row2.maintenance_id == row.id %}
@@ -49,12 +55,17 @@
 
                             {% endif %}
                           {% endfor %} -->
-                              <button type="button" class="btn btn-success" style="pointer-events: none;">{{row.status}}</button>
-                        </td> 
-                      </tr>
-                     {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-{% endblock %}
+              <!-- <button type="button" class="btn btn-success" style="pointer-events: none;">{{row.status}}</button> -->
+              {% if row.status == 'Paid' %}
+              <button type="button" class="btn btn-success" style="pointer-events: none;">{{ row.status }}</button>
+              {% else %}
+              <button type="button" class="btn btn-danger" style="pointer-events: none;">Pending</button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endblock %}

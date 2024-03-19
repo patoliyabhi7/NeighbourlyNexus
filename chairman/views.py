@@ -19,6 +19,7 @@ from django.core.exceptions import ValidationError
 import re
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_date
+from django.core.mail import send_mail
 
 def login(request):
     context={}
@@ -238,8 +239,38 @@ def store_event(request):
         return HttpResponseBadRequest("Error saving image file: " + str(e))
 
     Event.objects.create(title=title, description=description, from_date=from_date, to_date=to_date, price=price, image=image.name)
+    request.session['mail_title'] = title
+    request.session['mail_description'] = description
+    request.session['mail_from_date'] = from_date
+    request.session['mail_to_date'] = to_date
+    request.session['mail_price'] = price
 
+    send_email_event(request)
     return redirect('/chairman/all_events/')
+
+def send_email_event(request):
+    all_members = Member.objects.all()
+    mytos = [member.user.email for member in all_members]
+    mytitle = request.session['mail_title']
+    mydescription = request.session['mail_description']
+    myfrom_date = request.session['mail_from_date']
+    myto_date = request.session['mail_to_date']
+    myprice = request.session['mail_price']
+
+    mymessage = f"Title: {mytitle}\nDescription: {mydescription}\nDate: {myfrom_date} to {myto_date}\nPrice: {myprice}"
+
+    try:
+        send_mail(
+            mytitle,
+            mymessage,
+            settings.EMAIL_HOST_USER,
+            mytos,
+            fail_silently=False
+        )
+        messages.success(request, 'Email Sent Successfully')
+    except Exception as e:
+        messages.error(request, f'Error occurred: {str(e)}')
+    return redirect('/chairman/add_event/')
 
 @login_required(login_url='/chairman/login/')
 def all_events(request):
@@ -322,8 +353,37 @@ def store_meeting(request):
         messages.error(request, 'Scheduled date and time must be in the future.')
         return redirect('/chairman/schedule_meeting/')
 
+    request.session['mail_subject'] = subject
+    request.session['mail_venue'] = venue
+    request.session['mail_date'] = date_str
+    request.session['mail_time'] = time_str
+
     Meeting.objects.create(subject=subject, venue=venue, date=date_str, time=time_str)
+    send_email(request)
     return redirect('/chairman/all_meeting/')
+
+def send_email(request):
+    all_members = Member.objects.all()
+    mytos = [member.user.email for member in all_members]
+    mysubject = request.session['mail_subject']
+    myvenue = request.session['mail_venue']
+    mydate = request.session['mail_date']
+    mytime = request.session['mail_time']
+
+    mymessage = f"Subject: {mysubject}\nVenue: {myvenue}\nDate: {mydate}\nTime: {mytime}"
+
+    try:
+        send_mail(
+            mysubject,
+            mymessage,
+            settings.EMAIL_HOST_USER,
+            mytos,
+            fail_silently=False
+        )
+        messages.success(request, 'Email Sent Successfully')
+    except Exception as e:
+        messages.error(request, f'Error occurred: {str(e)}')
+    return redirect('/chairman/schedule_meeting/')
 
 @login_required(login_url='/chairman/login/')
 def all_meeting(request):
@@ -403,8 +463,38 @@ def store_maintenance(request):
         return redirect('/chairman/add_maintenance/')
 
     Maintenance.objects.create(year=year, description=description, from_date=from_date_str, to_date=to_date_str, amount=amount)
-
+    request.session['mail_year'] = year
+    request.session['mail_description'] = description
+    request.session['mail_from_date'] = from_date_str
+    request.session['mail_to_date'] = to_date_str
+    request.session['mail_amount'] = amount
+    send_email_maintenance(request)
     return redirect('/chairman/all_maintenance/')
+
+def send_email_maintenance(request):
+    all_members = Member.objects.all()
+    mytos = [member.user.email for member in all_members]
+    mytitle = "Maintenance"
+    mydescription = request.session['mail_description']
+    myyear = request.session['mail_year']
+    myfrom_date = request.session['mail_from_date']
+    myto_date = request.session['mail_to_date']
+    myamount = request.session['mail_amount']
+
+    mymessage = f"Title: {mytitle}\nDescription: {mydescription}\nYear: {myyear}\nDate: {myfrom_date} to {myto_date}\nAmount: {myamount}"
+
+    try:
+        send_mail(
+            mytitle,
+            mymessage,
+            settings.EMAIL_HOST_USER,
+            mytos,
+            fail_silently=False
+        )
+        messages.success(request, 'Email Sent Successfully')
+    except Exception as e:
+        messages.error(request, f'Error occurred: {str(e)}')
+    return redirect('/chairman/add_maintenance/')
 
 @login_required(login_url='/chairman/login/')
 def all_maintenance(request):
@@ -547,6 +637,7 @@ class GeneratePdf(View):
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']
+
         data = Member.objects.filter(reg_date__gte=from_date,reg_date__lte=to_date)
         cdate = date.today()
         cdate1 = cdate.strftime('%d/%m/%Y')
@@ -653,3 +744,4 @@ class GeneratePdf3(View):
          
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
+

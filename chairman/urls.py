@@ -33,6 +33,7 @@ urlpatterns = [
 
     path('add_event/', views.add_event, name='add_event'),
     path('store_event/', views.store_event, name='store_event'),
+    path('send_email_event/', views.send_email_event, name='send_email_event'),
     path('all_events/', views.all_events, name='all_events'),
     path('remove_event/<int:id>', views.remove_event, name='remove_event'),
     path('edit_event/<int:id>', views.edit_event, name='edit_event'),
@@ -41,12 +42,14 @@ urlpatterns = [
     path('schedule_meeting/', views.schedule_meeting, name='schedule_meeting'),
     path('store_meeting/', views.store_meeting, name='store_meeting'),
     path('all_meeting/', views.all_meeting, name='all_meeting'),
+    path('send_email/', views.send_email, name='send_email'),
     path('remove_meeting/<int:id>', views.remove_meeting, name='remove_meeting'),
     path('edit_meeting/<int:id>', views.edit_meeting, name='edit_meeting'),
     path('update_meeting/<int:id>', views.update_meeting, name='update_meeting'),
 
     path('add_maintenance/', views.add_maintenance, name='add_maintenance'),
     path('store_maintenance/', views.store_maintenance, name='store_maintenance'),
+    path('send_email_maintenance/', views.send_email_maintenance, name='send_email_maintenance'),
     path('all_maintenance/', views.all_maintenance, name='all_maintenance'),
     path('remove_maintenance/<int:id>', views.remove_maintenance, name='remove_maintenance'),
     path('edit_maintenance/<int:id>', views.edit_maintenance, name='edit_maintenance'),

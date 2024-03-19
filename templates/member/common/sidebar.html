@@ -11,7 +11,7 @@
     </a>
   </div>
 
-  <div class="menu-inner-shadow"></div>
+  <div class="menu-inner-shadow mt-3"></div>
 
   <ul class="menu-inner py-1 mt-3">
     <!-- Dashboard -->
@@ -97,7 +97,7 @@
     </li>
 
     <li
-      class="menu-item {% if request.path == '/member/member_details/' %}active{% endif %} {% if request.resolver_match.url_name == 'users_details' %}active{% endif %}">
+      class="menu-item {% if request.path == '/member/member_details/' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_profile' %}active{% endif %} {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">
       <a href="/member/member_details/" class="menu-link">
         <i class="menu-icon tf-icons bx bx-user"></i>
         <div data-i18n="Analytics">My Profile</div>

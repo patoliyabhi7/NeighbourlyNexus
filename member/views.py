@@ -125,7 +125,9 @@ def post_complaint(request):
     description = request.POST['description']
     id = request.user.id
     result = Member.objects.get(user_id=id).id
-
+    if not subject or not description:
+        messages.error(request, 'Please fill all the fields')
+        return redirect('/member/complaint/')
     Complain.objects.create(subject=subject,description=description,date_time=datetime.today(),member_id=result)
     return redirect('/member/complaint/')
 

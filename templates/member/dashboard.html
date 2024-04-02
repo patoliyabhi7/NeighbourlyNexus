@@ -4,71 +4,89 @@
 
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row">
-      <div class="row mb-5">
+  <div class="row">
 
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Pay Maintenance</h5>
-              <p class="card-text"></p>
-              <a href="javascript:void(0)" class="btn btn-primary">Pay</a>
+    <div class="row mb-2">
+      {% if notices %}
+      {% for notice in notices %}
+      <div class="col-md-6 col-lg-4" >
+        <div class="card text-center mb-3"  style="background-color: #696cff; border-color: #696cff;">
+          <div class="card-body" >
+            <h5 class="card-title" style="color: white;">Notice: {{ notice.title }}</h5>
+            <p class="card-text" style="color: white;">{{ notice.description }} <br> Date: {{ notice.datetime|date:"Y-m-d" }}</p>
             </div>
-          </div>
         </div>
-        
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Pay For Events</h5>
-              <p class="card-text"></p>
-              <a href="javascript:void(0)" class="btn btn-primary">Pay</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Post Complaint</h5>
-              <p class="card-text"></p>
-              <a href="/member/complaint/" class="btn btn-primary">Post</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">View Meetings</h5>
-              <p class="card-text"></p>
-              <a href="/member/all_meeting/" class="btn btn-primary">View</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">View Events</h5>
-              <p class="card-text"></p>
-              <a href="/member/all_events/" class="btn btn-primary">Events</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-          <div class="card text-center mb-3">
-            <div class="card-body">
-              <h5 class="card-title">View Maintenance</h5>
-              <p class="card-text"></p>
-              <a href="/member/all_maintenance/" class="btn btn-primary">View</a>
-            </div>
-          </div>
-        </div>
-
       </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+
+
+
+    <div class="row mb-5">
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Pay Maintenance</h5>
+            <p class="card-text"></p>
+            <a href="javascript:void(0)" class="btn btn-primary">Pay</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Pay For Events</h5>
+            <p class="card-text"></p>
+            <a href="javascript:void(0)" class="btn btn-primary">Pay</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Post Complaint</h5>
+            <p class="card-text"></p>
+            <a href="/member/complaint/" class="btn btn-primary">Post</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">View Meetings</h5>
+            <p class="card-text"></p>
+            <a href="/member/all_meeting/" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">View Events</h5>
+            <p class="card-text"></p>
+            <a href="/member/all_events/" class="btn btn-primary">Events</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card text-center mb-3">
+          <div class="card-body">
+            <h5 class="card-title">View Maintenance</h5>
+            <p class="card-text"></p>
+            <a href="/member/all_maintenance/" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
 
-          {% endblock %}
+{% endblock %}

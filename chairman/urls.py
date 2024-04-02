@@ -61,6 +61,10 @@ urlpatterns = [
     # path('paid_due_maintenance/', views.paid_due_maintenance, name='paid_due_maintenance'),
 
     path('all_complaints/', views.all_complaints, name='all_complaints'),
+    path('add_notice/', views.add_notice, name='add_notice'),
+    path('all_notices/', views.all_notices, name='all_notices'),
+    path('store_notice/', views.store_notice, name='store_notice'),
+    path('delete_notice/<int:id>', views.delete_notice, name='delete_notice'),
     path('complaint_details/<int:id>', views.complaint_details, name='complaint_details'),
     path('remove_complaint/<int:id>', views.remove_complaint, name='remove_complaint'),
 

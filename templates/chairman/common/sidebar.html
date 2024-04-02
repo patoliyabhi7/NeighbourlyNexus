@@ -44,6 +44,24 @@
           </li>
 
           <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Notice</span>
+          </li>
+
+          <li class="menu-item {% if request.path == '/chairman/add_notice/' %}active{% endif %} ">
+            <a href="/chairman/add_notice/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-star"></i>
+              <div data-i18n="Analytics">Add Notice</div>
+            </a>
+          </li>
+
+           <li class="menu-item {% if request.path == '/chairman/all_notices/' %}active{% endif %}  {% if request.resolver_match.url_name == 'edit_notice' %}active{% endif %}">
+            <a href="/chairman/all_notices/" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-calendar-event"></i>
+              <div data-i18n="Analytics">All Notice</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Event</span>
           </li>
 

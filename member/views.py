@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 import os
 from django.conf import settings
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import razorpay
 from django.views.decorators.csrf import csrf_exempt
 import random
@@ -52,7 +52,14 @@ def dashboard(request):
     id = request.user.id
     print(id)
     result = User.objects.get(pk=id)
-    context={'result' : result}
+
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    day_before_yesterday = yesterday - timedelta(days=1)
+
+    notices = Snotice.objects.filter(datetime__date__in=[today, yesterday, day_before_yesterday])
+
+    context = {'result': result, 'notices': notices}
     return render(request, 'member/dashboard.html', context)
 
 @login_required(login_url='/member/login/')

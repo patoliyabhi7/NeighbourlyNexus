@@ -32,3 +32,11 @@ class Maintenance(models.Model):
 
 	class Meta:
 		db_table = 'maintenance'
+
+class Snotice(models.Model):
+	title = models.CharField(max_length=50)
+	description = models.TextField()
+	datetime = models.DateTimeField()
+
+	class Meta:
+		db_table = 'snotice'

@@ -745,3 +745,34 @@ class GeneratePdf3(View):
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
 
+def add_notice(request):
+    context = {}
+    return render(request, 'chairman/add_notice.html', context)
+
+def store_notice(request):
+    if 'title' not in request.POST or 'description' not in request.POST:
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/add_notice/')
+
+    title = request.POST['title']
+    description = request.POST['description']
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    if not title or not description or not date:
+        messages.error(request, 'All fields are required.')
+        return redirect('/chairman/add_notice/')
+
+    Snotice.objects.create(title=title, description=description, datetime=current_date)
+    print("Notice added successfully")
+    return redirect('/chairman/add_notice/')
+
+def all_notices(request):
+    result = Snotice.objects.all()
+
+    context = {'result':result}
+    return render(request, 'chairman/all_notices.html', context)
+
+def delete_notice(request, id):
+    result = Snotice.objects.get(pk=id)
+    result.delete()
+    return redirect('/chairman/all_notices/')

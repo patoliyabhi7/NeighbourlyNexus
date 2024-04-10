@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
-
+from django.utils.dateparse import parse_date
 
 def login(request):
     context={}
@@ -299,25 +299,42 @@ def paid_maintenance_details(request,id):
 
 @login_required(login_url='/myadmin/login/')
 def customer_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Member.objects.filter(reg_date__gte=from_date,reg_date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/myadmin/customer_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/myadmin/customer_report/')  # Redirect to the appropriate view
+        
+        result = Member.objects.filter(reg_date__gte=from_date, reg_date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Member.objects.all()}
-    return render(request,'myadmin/customer_report.html',context)
+        context = {'user': Member.objects.all()}
+        
+    return render(request, 'myadmin/customer_report.html', context)
 
 #Creating a class based view
 class GeneratePdf(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']
+
         data = Member.objects.filter(reg_date__gte=from_date,reg_date__lte=to_date)
         cdate = date.today()
         cdate1 = cdate.strftime('%d/%m/%Y')
@@ -331,22 +348,38 @@ class GeneratePdf(View):
 
 @login_required(login_url='/myadmin/login/')
 def maintenance_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Maintenance_Payment.objects.filter(date__gte=from_date,date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/myadmin/maintenance_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/myadmin/maintenance_report/')  # Redirect to the appropriate view
+        
+        result = Maintenance_Payment.objects.filter(date__gte=from_date, date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Maintenance_Payment.objects.all()}
-    return render(request,'myadmin/maintenance_report.html',context)
+        context = {'user': Maintenance_Payment.objects.all()}
+        
+    return render(request, 'myadmin/maintenance_report.html', context)
 
 #Creating a class based view
 class GeneratePdf2(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']
@@ -360,25 +393,41 @@ class GeneratePdf2(View):
          
          # rendering the template
         return HttpResponse(pdf, content_type='application/pdf')
-        
+
 @login_required(login_url='/myadmin/login/')
 def event_report(request):
-    if request.method =='POST':
-        from_date = request.POST['from_date']
-        to_date   = request.POST['to_date']
-        result = Event_Payment.objects.filter(date__gte=from_date,date__lte=to_date)
-        request.session['from_date'] = from_date
-        request.session['to_date'] = to_date
+    if request.method == 'POST':
+        from_date_str = request.POST.get('from_date')
+        to_date_str = request.POST.get('to_date')
+        
+        if not from_date_str or not to_date_str:
+            messages.error(request, 'Please provide both from and to dates.')
+            return redirect('/myadmin/event_report/')  # Redirect to the appropriate view
+            
+        # Parsing the dates to ensure they are in the correct format
+        try:
+            from_date = parse_date(from_date_str)
+            to_date = parse_date(to_date_str)
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD format.')
+            return redirect('/myadmin/event_report/')  # Redirect to the appropriate view
+        
+        result = Event_Payment.objects.filter(date__gte=from_date, date__lte=to_date)
+        request.session['from_date'] = from_date_str
+        request.session['to_date'] = to_date_str
+        
         if result.exists():
-            context = {'user':result,'f':from_date,'t':to_date} 
+            context = {'user': result, 'f': from_date_str, 't': to_date_str}
         else:
-            context = {'user':None} 
+            context = {'user': None}
     else:
-        context = {'user':Event_Payment.objects.all()}
-    return render(request,'myadmin/event_report.html',context)
+        context = {'user': Event_Payment.objects.all()}
+        
+    return render(request, 'myadmin/event_report.html', context)
 
 #Creating a class based view
 class GeneratePdf3(View):
+    
      def get(self, request, *args, **kwargs):
         from_date = request.session['from_date']
         to_date   = request.session['to_date']

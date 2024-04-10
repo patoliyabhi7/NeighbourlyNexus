@@ -34,7 +34,7 @@
             </a>
           </li>
 
-          <li class="menu-item {% if request.path == '/chairman/view_member/' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %}">
+          <li class="menu-item {% if request.path == '/chairman/view_member/' %}active{% endif %} {% if request.resolver_match.url_name == 'member_details' %}active{% endif %} {% if request.resolver_match.url_name == 'edit_member' %}active{% endif %}">
             <a href="/chairman/view_member/" class="menu-link">
              <i class="menu-icon tf-icons bx bx-user"></i>
 

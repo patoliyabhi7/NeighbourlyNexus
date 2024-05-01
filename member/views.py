@@ -392,6 +392,8 @@ def random_thought(request):
 
 @login_required(login_url='/member/login/')
 def my_view(request):
-    random_thought = get_random_thought()  # Function to get a random thought
+    random_thought = get_random_thought() 
     print(random_thought)
     return render(request, 'my_template.html', {'thought': random_thought})
+
+

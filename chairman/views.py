@@ -587,11 +587,15 @@ def status_maintenance(request):
             m = Maintenance.objects.get(year=year)
         except Maintenance.DoesNotExist:
             messages.error(request, f"No Maintenance found for the year {year}")
-            return redirect('/chairman/status_maintenance/')  # Provide the appropriate redirect URL
+            return redirect('/chairman/status_maintenance/') 
 
         if status == 'due':
-            mp = Maintenance_Payment.objects.only('id').filter(maintenance_id=m.id)
-            result = Member.objects.exclude(id__in=mp)
+            mp = Maintenance_Payment.objects.filter(maintenance_id=m.id)
+            all_users = Member.objects.all()
+            users_without_payment = [user for user in all_users if not mp.filter(member=user).exists()]
+            result = users_without_payment
+            # mp = Maintenance_Payment.objects.only('id').filter(maintenance_id=m.id)
+            # result = Member.objects.exclude(id__in=mp)
         else:
             result = Maintenance_Payment.objects.filter(maintenance_id=m.id)
 
